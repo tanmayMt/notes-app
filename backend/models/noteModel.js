@@ -1,21 +1,25 @@
-const db = require('../config/db');
+const db = require("../config/db");
 
-const Note = {
-  getAll: (callback) => {
-    db.query('SELECT * FROM notes', callback);
-  },
-  getById: (id, callback) => {
-    db.query('SELECT * FROM notes WHERE id = ?', [id], callback);
-  },
-  create: (data, callback) => {
-    db.query('INSERT INTO notes SET ?', data, callback);
-  },
-  update: (id, data, callback) => {
-    db.query('UPDATE notes SET ? WHERE id = ?', [data, id], callback);
-  },
-  delete: (id, callback) => {
-    db.query('DELETE FROM notes WHERE id = ?', [id], callback);
-  },
+exports.getAllNotes = (callback) => {
+  db.query("SELECT * FROM notes ORDER BY created_at DESC", callback);
 };
 
-module.exports = Note;
+exports.getNoteById = (id, callback) => {
+  db.query("SELECT * FROM notes WHERE id = ?", [id], callback);
+};
+
+exports.createNote = (data, callback) => {
+  const { title, description, tag } = data;
+  db.query("INSERT INTO notes (title, description, tag) VALUES (?, ?, ?)",
+    [title, description, tag], callback);
+};
+
+exports.updateNote = (id, data, callback) => {
+  const { title, description, tag } = data;
+  db.query("UPDATE notes SET title=?, description=?, tag=? WHERE id=?",
+    [title, description, tag, id], callback);
+};
+
+exports.deleteNote = (id, callback) => {
+  db.query("DELETE FROM notes WHERE id = ?", [id], callback);
+};

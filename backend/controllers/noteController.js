@@ -1,33 +1,36 @@
-const Note = require('../models/noteModel');
+const Note = require("../models/noteModel");
 
 exports.getNotes = (req, res) => {
-  Note.getAll((err, results) => {
+  Note.getAllNotes((err, results) => {
     if (err) return res.status(500).send(err);
     res.json(results);
   });
 };
 
-exports.createNote = (req, res) => {
-  const data = req.body;
-  Note.create(data, (err, result) => {
+exports.getNote = (req, res) => {
+  Note.getNoteById(req.params.id, (err, result) => {
     if (err) return res.status(500).send(err);
-    res.json({ message: 'Note added successfully', id: result.insertId });
+    res.json(result[0]);
+  });
+};
+
+exports.createNote = (req, res) => {
+  Note.createNote(req.body, (err, result) => {
+    if (err) return res.status(500).send(err);
+    res.json({ message: "Note created", id: result.insertId });
   });
 };
 
 exports.updateNote = (req, res) => {
-  const id = req.params.id;
-  const data = req.body;
-  Note.update(id, data, (err) => {
+  Note.updateNote(req.params.id, req.body, (err, result) => {
     if (err) return res.status(500).send(err);
-    res.json({ message: 'Note updated successfully' });
+    res.json({ message: "Note updated" });
   });
 };
 
 exports.deleteNote = (req, res) => {
-  const id = req.params.id;
-  Note.delete(id, (err) => {
+  Note.deleteNote(req.params.id, (err, result) => {
     if (err) return res.status(500).send(err);
-    res.json({ message: 'Note deleted successfully' });
+    res.json({ message: "Note deleted" });
   });
 };
