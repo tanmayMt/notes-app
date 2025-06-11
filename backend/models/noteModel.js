@@ -1,7 +1,8 @@
 const db = require("../config/db");
 
 exports.getAllNotes = (callback) => {
-  db.query("SELECT * FROM notes ORDER BY created_at DESC", callback);
+  //db.query("SELECT * FROM notes ORDER BY created_at DESC", callback);
+  db.query("SELECT * FROM notes", callback);
 };
 
 exports.getNoteById = (id, callback) => {

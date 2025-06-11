@@ -1,0 +1,34 @@
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';       // ✅ Required for ngModel
+import { AppComponent } from './app.component';
+import { NoteFormComponent } from './components/note-form/note-form.component';
+import { NoteListComponent } from './components/note-list/note-list.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    NoteFormComponent,
+    NoteListComponent
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+
+
+
+// import { NgModule } from '@angular/core';
+
+// @NgModule({
+//   imports: [],
+//   declarations: [], // ✅ No components here
+//   providers: [],
+// })
+// export class AppModule {}
