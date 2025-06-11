@@ -1,32 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NoteService } from '../../services/note.service';
-import { Note } from '../../models/note.model';
+import { NoteService, Note } from '../../services/note.service';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-note-list',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './note-list.component.html'
+  templateUrl: './note-list.component.html',
+  styleUrls: ['./note-list.component.css'],
+  // REMOVE this ↓ line
+  // standalone: true,
 })
 export class NoteListComponent implements OnInit {
   notes: Note[] = [];
 
-  constructor(private noteService: NoteService) {}
+  constructor(
+    private noteSvc: NoteService,
+    private router: Router,
+    private snack: MatSnackBar
+  ) {}
 
-  ngOnInit(): void {
-    this.getNotes();
+  ngOnInit() {
+    this.fetchNotes();
   }
 
-  getNotes(): void {
-    this.noteService.getNotes().subscribe(data => this.notes = data);
+  fetchNotes() {
+    this.noteSvc.getAll().subscribe({
+      next: data => (this.notes = data),
+      error: err => this.snack.open(`Error: ${err.message}`, 'Close')
+    });
   }
 
-  // deleteNote(id: number): void {
-  //   this.noteService.deleteNote(id).subscribe(() => this.getNotes());
-  // }
-  deleteNote(id: number | undefined): void {
-  if (id === undefined) return;
-  this.noteService.deleteNote(id).subscribe(() => this.getNotes());
-}
+  deleteNote(id: number) {
+    if (!confirm('Delete this note?')) return;
+    this.noteSvc.delete(id).subscribe({
+      next: () => {
+        this.snack.open('Deleted', 'OK', { duration: 2000 });
+        this.fetchNotes();
+      },
+      error: err => this.snack.open(`Error: ${err.message}`, 'Close')
+    });
+  }
 }
