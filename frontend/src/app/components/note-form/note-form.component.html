@@ -1,9 +1,24 @@
-<form (ngSubmit)="onSubmit()">
-  <input type="text" [(ngModel)]="note.title" name="title" required placeholder="Title" />
-  <br />
-  <textarea [(ngModel)]="note.description" name="description" required placeholder="Description"></textarea>
-  <br />
-  <input type="text" [(ngModel)]="note.tag" name="tag" placeholder="Tag (optional)" />
-  <br />
-  <button type="submit">Save Note</button>
-</form>
+<mat-card>
+  <mat-card-title>{{ isEdit ? 'Edit Note' : 'Add Note' }}</mat-card-title>
+  <form [formGroup]="noteForm" (ngSubmit)="submit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Tag</mat-label>
+      <input matInput formControlName="tag" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="noteForm.invalid">
+      {{ isEdit ? 'Update' : 'Add' }}
+    </button>
+    <button mat-button (click)="router.navigate(['/'])">Cancel</button>
+  </form>
+</mat-card>

@@ -1,25 +1,55 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Note } from '../../models/note.model';
-import { NoteService } from '../../services/note.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NoteService, Note } from '../../services/note.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-note-form',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './note-form.component.html'
 })
-export class NoteFormComponent {
-  @Input() note: Note = { title: '', description: '', tag: '' };
+export class NoteFormComponent implements OnInit {
+  noteForm!: FormGroup;
+  isEdit = false;
+  noteId!: number;
 
-  constructor(private noteService: NoteService) {}
+  constructor(
+    private fb: FormBuilder,
+    private noteSvc: NoteService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private snack: MatSnackBar
+  ) {}
 
-  onSubmit(): void {
-    if (this.note.id) {
-      this.noteService.updateNote(this.note.id, this.note).subscribe();
-    } else {
-      this.noteService.createNote(this.note).subscribe();
+  ngOnInit() {
+    this.noteForm = this.fb.group({
+      title: ['', Validators.required],
+      description: [''],
+      tag: ['']
+    });
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEdit = true;
+      this.noteId = +id;
+      this.noteSvc.getOne(this.noteId).subscribe({
+        next: note => this.noteForm.patchValue(note)
+      });
     }
   }
+
+  submit() {
+    const fn = this.isEdit
+      ? this.noteSvc.update(this.noteId, this.noteForm.value)
+      : this.noteSvc.create(this.noteForm.value);
+
+    fn.subscribe({
+      next: () => {
+        this.snack.open('Saved!', 'OK', { duration: 2000 });
+        this.router.navigate(['/']);
+      },
+      error: err => this.snack.open(`Error: ${err.message}`, 'Close')
+    });
+  }
 }
+

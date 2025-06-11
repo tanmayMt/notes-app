@@ -1,29 +1,39 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Note } from '../models/note.model';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface Note {
+  id?: number;
+  title: string;
+  description?: string;
+  tag?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+@Injectable({ providedIn: 'root' })
 export class NoteService {
-  private apiUrl = '/api/notes'; // Proxy handles forwarding
+  private apiUrl = 'http://localhost:5000/api/notes';
 
   constructor(private http: HttpClient) {}
 
-  getNotes(): Observable<Note[]> {
+  getAll(): Observable<Note[]> {
     return this.http.get<Note[]>(this.apiUrl);
   }
 
-  createNote(note: Note): Observable<Note> {
+  getOne(id: number): Observable<Note> {
+    return this.http.get<Note>(`${this.apiUrl}/${id}`);
+  }
+
+  create(note: Note): Observable<Note> {
     return this.http.post<Note>(this.apiUrl, note);
   }
 
-  updateNote(id: number, note: Note): Observable<Note> {
+  update(id: number, note: Note): Observable<Note> {
     return this.http.put<Note>(`${this.apiUrl}/${id}`, note);
   }
 
-  deleteNote(id: number): Observable<any> {
+  delete(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

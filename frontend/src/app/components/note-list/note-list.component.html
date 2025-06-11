@@ -1,9 +1,20 @@
-<ul>
-  <li *ngFor="let note of notes">
-    <h3>{{ note.title }}</h3>
-    <p>{{ note.description }}</p>
-    <small>{{ note.tag }}</small>
-    <br />
-    <button (click)="deleteNote(note.id)">Delete</button>
-  </li>
-</ul>
+<mat-toolbar color="primary">
+  <span>My Notes</span>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="router.navigate(['/add'])">
+    <mat-icon>add</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-list>
+  <mat-list-item *ngFor="let note of notes">
+    <h3 matLine>{{ note.title }}</h3>
+    <p matLine>{{ note.description }}</p>
+    <button mat-icon-button (click)="router.navigate(['/edit', note.id])">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="deleteNote(note.id!)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-list-item>
+</mat-list>
