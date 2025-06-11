@@ -13,6 +13,9 @@ app.use(bodyParser.json());
 
 app.use("/api/notes", noteRoutes);
 
+app.get("/", (req, res) => {
+    res.status(200).send("<h1>Welcome To the Notes App Server</h1>");
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on port \x1b[4mhttp://localhost:${PORT}\x1b[0m`);
