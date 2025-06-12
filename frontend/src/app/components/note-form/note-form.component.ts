@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NoteService, Note } from '../../services/note.service';
+import { NoteService } from '../../services/note.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-note-form',
-  templateUrl: './note-form.component.html'
+  templateUrl: './note-form.component.html',
+  styleUrls: ['./note-form.component.css']
 })
 export class NoteFormComponent implements OnInit {
   noteForm!: FormGroup;
@@ -52,4 +53,3 @@ export class NoteFormComponent implements OnInit {
     });
   }
 }
-
