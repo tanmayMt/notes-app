@@ -5,8 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-note-list',
-  templateUrl: './note-list.component.html',
-  styleUrls: ['./note-list.component.css']
+  templateUrl: './note-list.html',
+  styleUrls: ['./note-list.scss']
 })
 export class NoteListComponent implements OnInit {
   notes: Note[] = [];

@@ -6,8 +6,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-note-form',
-  templateUrl: './note-form.component.html',
-  styleUrls: ['./note-form.component.css']
+  templateUrl: './note-form.html',
+  styleUrls: ['./note-form.scss']
 })
 export class NoteFormComponent implements OnInit {
   noteForm!: FormGroup;
